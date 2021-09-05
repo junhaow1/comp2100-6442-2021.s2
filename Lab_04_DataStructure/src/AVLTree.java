@@ -76,36 +76,43 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
         if (newTree.getBalanceFactor() == 1 || newTree.getBalanceFactor() == 0 || newTree.getBalanceFactor() == -1){
             return newTree;
         } else {
-            if (newTree.getBalanceFactor()>1){
+            if (newTree.getBalanceFactor()>0){
                 // left problem case 1 or 3
 
                 AVLTree<T> curLeftNode = (AVLTree<T>) newTree.leftNode;
                 //left violate case 1
-                if (curLeftNode.getBalanceFactor()>1){
+                if (curLeftNode.getBalanceFactor()>=0){
                     newTree = newTree.rightRotate();
+                    return newTree;
                 } else {
                     //else case 3
                     curLeftNode = curLeftNode.leftRotate();
                     newTree = new AVLTree<>(value,curLeftNode,rightNode);
                     newTree = newTree.rightRotate();
+                    return newTree;
 
                 }
 
-                return newTree;
-            } else if (newTree.getBalanceFactor()<-1){
+//                return newTree;
+            } else if (newTree.getBalanceFactor()<0){
                 // right problem case 2 or 4
 
                 AVLTree<T> curRightNode = (AVLTree<T>) newTree.rightNode;
                 //right violate case2
-                if (curRightNode.getBalanceFactor()<-1){
+                if (curRightNode.getBalanceFactor()<=0){
                     newTree = newTree.leftRotate();
+                    return newTree;
                 } else {
                     //else case 4
                     curRightNode = curRightNode.rightRotate();
+                    newTree = new AVLTree<>(value, leftNode, curRightNode);
+
                     newTree = newTree.leftRotate();
+                    return newTree;
+
                 }
 
-                return newTree;
+//                return newTree;
             } else {
                 return newTree;
             }
