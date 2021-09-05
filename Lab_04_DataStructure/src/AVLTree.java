@@ -56,18 +56,62 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
          */
 
         // Ensure input is not null.
+        AVLTree<T> newTree;
+
         if (element == null)
             throw new IllegalArgumentException("Input cannot be null");
 
         if (element.compareTo(value) > 0) {
             // COMPLETE
+            newTree  = new AVLTree<>(value,leftNode,rightNode.insert(element));
         } else if (element.compareTo(value) < 0) {
             // COMPLETE
+            newTree  = new AVLTree<>(value,leftNode.insert(element),rightNode);
+
         } else {
             // COMPLETE
+            return this;
         }
 
-        return this; // Change to return something different
+        if (newTree.getBalanceFactor() == 1 || newTree.getBalanceFactor() == 0 || newTree.getBalanceFactor() == -1){
+            return newTree;
+        } else {
+            if (newTree.getBalanceFactor()>1){
+                // left problem case 1 or 3
+
+                AVLTree<T> curLeftNode = (AVLTree<T>) newTree.leftNode;
+                //left violate case 1
+                if (curLeftNode.getBalanceFactor()>1){
+                    newTree = newTree.rightRotate();
+                } else {
+                    //else case 3
+                    curLeftNode = curLeftNode.leftRotate();
+                    newTree = new AVLTree<>(value,curLeftNode,rightNode);
+                    newTree = newTree.rightRotate();
+
+                }
+
+                return newTree;
+            } else if (newTree.getBalanceFactor()<-1){
+                // right problem case 2 or 4
+
+                AVLTree<T> curRightNode = (AVLTree<T>) newTree.rightNode;
+                //right violate case2
+                if (curRightNode.getBalanceFactor()<-1){
+                    newTree = newTree.leftRotate();
+                } else {
+                    //else case 4
+                    curRightNode = curRightNode.rightRotate();
+                    newTree = newTree.leftRotate();
+                }
+
+                return newTree;
+            } else {
+                return newTree;
+            }
+        }
+
+//        return this; // Change to return something different
     }
 
     /**
@@ -77,7 +121,6 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
      */
     public AVLTree<T> leftRotate() {
         /*
-            TODO: Write and or complete this method so that you can conduct a left rotation on the current node.
             This can be quite difficult to get your head around. Try looking for visualisations
             of left rotate if you are confused.
 
@@ -113,7 +156,6 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
      */
     public AVLTree<T> rightRotate() {
         /*
-            TODO: Write this method so that you can conduct a right rotation on the current node.
             This can be quite difficult to get your head around. Try looking for visualisations
             of right rotate if you are confused.
 
