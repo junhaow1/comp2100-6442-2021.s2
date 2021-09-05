@@ -25,24 +25,36 @@ public class PrinterQueue implements SimpleQueue<String> {
      *  Note that you can complete the whole task with a list. However, you can make life easier
      *  by choosing the right data structure as we will find out later in this course.
      */
-    private List<String> queue = new ArrayList<>();
 
-    // TODO: store an instance of the printer queue.
+    // store an instance of the printer queue.
+            // 1.static instance
+    private static PrinterQueue printerQueue;
+
+    static List<String> queue = new ArrayList<>();
+
+
 
     /**
      * Private constructor so it can only be accessed from within the class
      */
-    private PrinterQueue() {};
+//    4.constructor private
+    private PrinterQueue() {
+        printerQueue = null;
+    };
 
     /**
      * @return new instance if it currently does not exist and current instance if it already exists.
      */
+    // 2.public static creation method
     public static PrinterQueue getInstance() {
         /*
-         TODO: implement this method
          Note that you will need to create an instance of PrinterQueue.
          */
-        return null;
+        // 3.lazy initialization
+        if (printerQueue == null){
+            printerQueue = new PrinterQueue();
+        }
+        return printerQueue;
     }
 
     /**
@@ -51,8 +63,8 @@ public class PrinterQueue implements SimpleQueue<String> {
      */
     @Override
     public boolean add(String paper) {
-        // TODO: implement this method
-        return false;
+        queue.add(paper);
+        return true;
     }
 
     /**
@@ -61,8 +73,12 @@ public class PrinterQueue implements SimpleQueue<String> {
      */
     @Override
     public String peek() {
-        // TODO: implement this method
-        return null;
+        if (queue.isEmpty()){
+            return null;
+        } else {
+            return queue.get(0);
+        }
+
     }
 
     /**
@@ -71,7 +87,12 @@ public class PrinterQueue implements SimpleQueue<String> {
      */
     @Override
     public String poll() {
-        // TODO: implement this method
-        return null;
+        if (queue.isEmpty()){
+            return null;
+        } else {
+            String out = queue.get(0);
+            queue.remove(0);
+            return out;
+        }
     }
 }

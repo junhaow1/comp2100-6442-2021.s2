@@ -94,9 +94,16 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 
         Tree<T> newParent = this.rightNode;
         Tree<T> newRightOfCurrent = newParent.leftNode;
-        // COMPLETE
 
-        return null; // Change to return something different
+        Tree<T> newLeftOfCurrent = this.leftNode;
+        Tree<T> newRight = newParent.rightNode;
+
+        newParent.leftNode =  new AVLTree<>(value,newLeftOfCurrent,newRightOfCurrent);
+        newParent.rightNode = newRight;
+
+        return (AVLTree<T>)newParent;
+
+
     }
 
     /**
@@ -121,7 +128,15 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
             than something about your code is incorrect!
          */
 
-        return null; // Change to return something different
+        Tree<T> newParent = this.leftNode;
+        Tree<T> newRightOfCurrent = this.rightNode;
+
+        Tree<T> newLeftOfCurrent = newParent.rightNode;
+
+        newParent.rightNode =  new AVLTree<>(value,newLeftOfCurrent,newRightOfCurrent);
+
+        return (AVLTree<T>)newParent;
+
     }
 
     /**

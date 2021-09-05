@@ -20,7 +20,14 @@ public class PathCompleteTest {
 		// Implement your test cases
 		// START YOUR CODE
 
-		
+		assertEquals(3, PathComplete.findSomething(3, 2, 1));
+		assertEquals(3, PathComplete.findSomething(2, 1, 3));
+		assertEquals(3, PathComplete.findSomething(3, 1, 2));
+		assertEquals(3, PathComplete.findSomething(1, 3, 2));
+		assertEquals(3, PathComplete.findSomething(1, 2, 3));
+
+
+
 		// END YOUR CODE
 	}
 }

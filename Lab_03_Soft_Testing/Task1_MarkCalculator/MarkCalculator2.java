@@ -1,4 +1,6 @@
 public class MarkCalculator2 implements MarkCalculator {
+	public MarkCalculator2() {
+	}
 
 	public MarkGrade calculateMark(int lab, int assignment1, int assignment2,
 								   int finalExam, boolean attendedFinal, boolean allRedeemableOnFinal)
