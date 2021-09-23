@@ -54,6 +54,11 @@ public class BTree<T extends Comparable<T>> {
 
 
         root.insert(key);   // Feel free to replace this.
+        if (root.isOverSize()){
+            BTreeNode newRoot = new BTreeNode();
+            split(newRoot,root);
+            root = newRoot;
+        }
     }
 
     /**
@@ -82,18 +87,36 @@ public class BTree<T extends Comparable<T>> {
         if (node == null || childToSplit == null)
             throw new IllegalArgumentException("Input cannot be null");
 
-        // Get medium key
+        // Get median key
         int med = childToSplit.keys.size() / 2;
         T medValue = childToSplit.keys.get(med);
 
-        // Add the medium key to the parent node in the correct position.
+        // Add the median key to the parent node in the correct position.
         this.addInOrder(node.keys, medValue);
 
-        // TODO: get an array of everything right of the medium.
-
-        // TODO: get an array of everything left of the medium.
-
+        // TODO: get an array of everything right of the median.
+        LimitedArrayList<T> right = childToSplit.keys.get(med+1,order);
+        LimitedArrayList<BTreeNode> rightChildren;
+        if (childToSplit.children.size() > med){
+            rightChildren = childToSplit.children.get(med+1,childToSplit.children.size());
+        }else {
+            rightChildren = new LimitedArrayList<BTreeNode>(order + 1);
+        }
+        // TODO: get an array of everything left of the median.
+        LimitedArrayList<T> left = childToSplit.keys.get(0,med);
+        LimitedArrayList<BTreeNode> leftChildren = childToSplit.children.get(0,Math.min(childToSplit.children.size(), med+1));
         // TODO: think of and write the rest of the split method. You may also choose to re-write the above.
+        BTreeNode newLeftNode = new BTreeNode();
+        newLeftNode.keys = left;
+        newLeftNode.children = leftChildren;
+
+        BTreeNode newRightNode = new BTreeNode();
+        newRightNode.keys = right;
+        newRightNode.children = rightChildren;
+
+        int position = node.keys.indexOf(medValue);
+        node.children.add(position,newRightNode);
+        node.children.add(position,newLeftNode);
     }
 
     /**
@@ -211,7 +234,42 @@ public class BTree<T extends Comparable<T>> {
             // Ensure input is not null.
             if (key == null)
                 throw new IllegalArgumentException("Input cannot be null");
+            if (this.isLeaf()){
+                addInOrder(this.keys,key);
+            }
+            else{
+                for (int i = 0;i < keys.size();i++){
+                    if (this.keys.get(i).compareTo(key) > 0){
+                        if (this.children.get(i) == null){
+                            this.children.add(i, new BTreeNode());
+                        }
+                        BTreeNode curNode = this.children.get(i);
+                        curNode.insert(key);
+                        if (curNode.isOverSize()){
+                            split(this,curNode);
+                            this.children.remove(curNode);
+                        }
+                        return;
+                    }
+                }
+                if (this.children.get(keys.size()) == null){
+                    this.children.add(keys.size(),new BTreeNode());
+                }
+                BTreeNode bTreeNode = this.children.get(keys.size());
+                bTreeNode.insert(key);
+                if (bTreeNode.isOverSize()){
+                    split(this,bTreeNode);
+                    this.children.remove(bTreeNode);
+                }
+            }
+        }
 
+        private boolean isLeaf(){
+            return this.children.isEmpty();
+        }
+
+        private boolean isOverSize(){
+            return order == this.keys.size();
         }
 
         /**
@@ -222,14 +280,25 @@ public class BTree<T extends Comparable<T>> {
                 Task 2.
                 TODO: complete this method.
              */
-
-            return this.keys.get(0); // Replace this
+            if (root.keys.size() ==0){
+                return null;
+            }
+            if (this.children.isEmpty()) {
+                return this.keys.get(this.keys.size()-1);
+            } else {
+                return this.children.get(this.children.size()-1).max(); // Replace this
+            }
         }
 
         /**
          * @return minimum key of the BTree
          */
         public T min() {
+            // Ensure that the BTreeNode is not empty (note that if there are no keys, then there can't be children).
+            if (this.keys.size() == 0) {
+                return null;
+            }
+
             // Check if leaf
             if (this.children.size() == 0) {
                 // Return minimum value (should be left most).

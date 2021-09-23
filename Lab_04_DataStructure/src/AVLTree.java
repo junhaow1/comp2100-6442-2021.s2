@@ -49,27 +49,16 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 
     @Override
     public AVLTree<T> insert(T element) {
-        /*
-            TODO: Write and or complete your insertion code here
-            Note that what each method does is described in its superclass unless edited.
-            E.g. what 'insert' does is described in Tree.java.
-         */
-
-        // Ensure input is not null.
         AVLTree<T> newTree;
 
         if (element == null)
             throw new IllegalArgumentException("Input cannot be null");
 
         if (element.compareTo(value) > 0) {
-            // COMPLETE
             newTree  = new AVLTree<>(value,leftNode,rightNode.insert(element));
         } else if (element.compareTo(value) < 0) {
-            // COMPLETE
             newTree  = new AVLTree<>(value,leftNode.insert(element),rightNode);
-
         } else {
-            // COMPLETE
             return this;
         }
 
@@ -78,7 +67,6 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
         } else {
             if (newTree.getBalanceFactor()>0){
                 // left problem case 1 or 3
-
                 AVLTree<T> curLeftNode = (AVLTree<T>) newTree.leftNode;
                 //left violate case 1
                 if (curLeftNode.getBalanceFactor()>=0){
@@ -90,13 +78,9 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
                     newTree = new AVLTree<>(value,curLeftNode,rightNode);
                     newTree = newTree.rightRotate();
                     return newTree;
-
                 }
-
-//                return newTree;
             } else if (newTree.getBalanceFactor()<0){
                 // right problem case 2 or 4
-
                 AVLTree<T> curRightNode = (AVLTree<T>) newTree.rightNode;
                 //right violate case2
                 if (curRightNode.getBalanceFactor()<=0){
@@ -106,19 +90,13 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
                     //else case 4
                     curRightNode = curRightNode.rightRotate();
                     newTree = new AVLTree<>(value, leftNode, curRightNode);
-
                     newTree = newTree.leftRotate();
                     return newTree;
-
                 }
-
-//                return newTree;
             } else {
                 return newTree;
             }
         }
-
-//        return this; // Change to return something different
     }
 
     /**
@@ -127,20 +105,6 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
      * @return the new 'current' or 'top' node after rotation.
      */
     public AVLTree<T> leftRotate() {
-        /*
-            This can be quite difficult to get your head around. Try looking for visualisations
-            of left rotate if you are confused.
-
-            Note: if this is implemented correctly than the return MUST be an AVL tree. However, the
-            rotation may move around EmptyAVL trees. So when moving trees, the type of the trees can
-            be 'Tree<T>'. However, the return type should be of AVLTree<T>. To cast the return type into
-            AVLTree<T> simply use: (AVLTree<T>).
-
-            If you get an casting exception such as:
-            'java.lang.ClassCastException: class AVLTree$EmptyAVL cannot be cast to class AVLTree
-            (AVLTree$EmptyAVL and AVLTree are in unnamed module of loader 'app')'
-            than something about your code is incorrect!
-         */
 
         Tree<T> newParent = this.rightNode;
         Tree<T> newRightOfCurrent = newParent.leftNode;
@@ -152,8 +116,6 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
         newParent.rightNode = newRight;
 
         return (AVLTree<T>)newParent;
-
-
     }
 
     /**
@@ -162,21 +124,6 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
      * @return the new 'current' or 'top' node after rotation.
      */
     public AVLTree<T> rightRotate() {
-        /*
-            This can be quite difficult to get your head around. Try looking for visualisations
-            of right rotate if you are confused.
-
-            Note: if this is implemented correctly than the return MUST be an AVL tree. However, the
-            rotation may move around EmptyAVL trees. So when moving trees, the type of the trees can
-            be 'Tree<T>'. However, the return type should be of AVLTree<T>. To cast the return type into
-            AVLTree<T> simply use: (AVLTree<T>).
-
-            If you get an casting exception such as:
-            'java.lang.ClassCastException: class AVLTree$EmptyAVL cannot be cast to class AVLTree
-            (AVLTree$EmptyAVL and AVLTree are in unnamed module of loader 'app')'
-            than something about your code is incorrect!
-         */
-
         Tree<T> newParent = this.leftNode;
         Tree<T> newRightOfCurrent = this.rightNode;
 
@@ -185,7 +132,6 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
         newParent.rightNode =  new AVLTree<>(value,newLeftOfCurrent,newRightOfCurrent);
 
         return (AVLTree<T>)newParent;
-
     }
 
     /**

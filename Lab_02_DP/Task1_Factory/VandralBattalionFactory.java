@@ -29,7 +29,7 @@ public class VandralBattalionFactory {
      * @throws Exception if the player level is not within 1 and 100 inclusive
      */
     public static VandralBattalion createVandralBattalion(Difficulty difficulty, int playerLevel)
-        throws Exception {
+            throws Exception {
 
         // We have done the exception handling for you. :)
         if (playerLevel < 1 || playerLevel > 100) {
@@ -37,13 +37,20 @@ public class VandralBattalionFactory {
         }
 
         // TODO: complete this method
-        // If you are unsure of where to start, write your factory code below.
-        // Keep in mind that you may use helper methods or edit this class as you please.
+        if (difficulty == Difficulty.HARD){
+            int numMuggle = playerLevel;
+            int numLowArchon = Math.min(75/2,playerLevel/2);
+            int numHighArchon = Math.max(0, playerLevel/2 - 76/2);
+            int numHealer = numMuggle/20 + numLowArchon/3 +numHighArchon;
+            return new VandralBattalion(numMuggle,numHealer,numLowArchon,numHighArchon);
 
-        // The following code is just here to prevent an error with regards to the method's promise to return something. Delete it when you start coding.
-        return new VandralBattalion(0,0,0,0);
+        } else {
+            int numMuggle = playerLevel/2;
+            int numLowArchon = Math.min(15,playerLevel/5);
+            int numHighArchon = Math.max(0, playerLevel/5 - 15);
+            int numHealer = numMuggle/20 + numLowArchon/3 +numHighArchon;
+            return new VandralBattalion(numMuggle,numHealer,numLowArchon,numHighArchon);
 
-        // If you are unsure of where to start, write your factory code above.
+        }
     }
-
 }

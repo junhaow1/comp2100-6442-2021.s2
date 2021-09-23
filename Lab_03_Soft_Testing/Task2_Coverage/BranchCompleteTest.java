@@ -19,6 +19,12 @@ public class BranchCompleteTest {
     public void attemptToMakeFriendTest() {
         // Implement your test cases
         // START YOUR CODE
+        BranchComplete.attemptToMakeFriend("42");
+        BranchComplete.attemptToMakeFriend("ok");
+        BranchComplete.attemptToMakeFriend("wolf");
+        BranchComplete.attemptToMakeFriend("elsee");
+
+
 
         // END YOUR CODE
     }

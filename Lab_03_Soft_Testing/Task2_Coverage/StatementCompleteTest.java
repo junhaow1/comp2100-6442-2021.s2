@@ -1,5 +1,7 @@
 import org.junit.Test;
 
+import javax.swing.plaf.nimbus.State;
+
 import static org.junit.Assert.*;
 
 /**
@@ -25,6 +27,8 @@ public class StatementCompleteTest {
     public void sumAndMultiplyTest() {
         // Implement your test cases
         // START YOUR CODE
+        StatementComplete.sumAndMultiply(-1);
+        StatementComplete.sumAndMultiply(1);
 
 
         // END YOUR CODE
