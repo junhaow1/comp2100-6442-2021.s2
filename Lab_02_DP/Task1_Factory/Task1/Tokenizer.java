@@ -98,32 +98,27 @@ public class Tokenizer {
             currentToken = new Token("(", Token.Type.LBRA);
         if (firstChar == ')')
             currentToken = new Token(")", Token.Type.RBRA);
+        //handle int
         if (Character.isDigit(firstChar)){
             StringBuilder stringBuilder =  new StringBuilder();
             int pos = 0 ;
+            //current char (digit) , pointer
             char current = buffer.charAt(pos);
             while(Character.isDigit(current)){
-                System.out.println("add:"+current);
-                System.out.println("origin string:"+stringBuilder.toString());
                 stringBuilder.append(current);
-                System.out.println("current string:"+stringBuilder.toString());
                 pos++;
+                // if else to handle the out of range bug
+                //make sure the current pointer is not out of bounds
                 if(pos<buffer.length()){
                     current = buffer.charAt(pos);
                 } else {
                     break;
                 }
-
-                System.out.println("new char:"+current);
-
-
             }
-
             currentToken = new Token(stringBuilder.toString(), Token.Type.INT);
-
         }
         if (firstChar!='+' && firstChar!='-' &&firstChar!='*' &&firstChar!='/' &&firstChar!='(' &&firstChar!=')'&&!Character.isDigit(firstChar) ){
-            throw new Token.IllegalTokenException("sss") ;
+            throw new Token.IllegalTokenException("Dumb Ass :)") ;
         }
 
 

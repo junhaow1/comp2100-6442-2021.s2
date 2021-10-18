@@ -1,7 +1,7 @@
-package Task1_Factory.Task2;
+package Task1_Factory.Task2.Search;
 
-import Task1_Factory.Task1.Token;
-import Task1_Factory.Task1.Tokenizer;
+//import Task1_Factory.Task1.Token;
+//import Task1_Factory.Task1.Tokenizer;
 
 import java.util.Scanner;
 
@@ -74,11 +74,68 @@ public class Parser {
 
             // Print out the expression from the parser.
             Parser parser = new Parser(tokenizer);
-            Exp expression = parser.parseExp();
-            System.out.println("Parsing: " + expression.show());
-            System.out.println("Evaluation: " + expression.evaluate());
+//            System.out.println(parser.getTag().show());
+//
+//            System.out.println(parser.getPostId().show());
+            if (parser.getTag()==null){
+                System.out.println("no Tag");
+            }else {
+                System.out.println(parser.getTag().show());
+            }
+
+            if (parser.getPostId()==null){
+                System.out.println("no postId");
+            }else {
+                System.out.println(parser.getPostId().show());
+
+            }
+
+//            Exp expression = parser.parseExp();
+//            System.out.println("Parsing: " + expression.show());
+//            System.out.println("Evaluation: " + expression.evaluate());
         }
     }
+
+
+    public Exp getTag(){
+        Tokenizer tok = tokenizer;
+        //handle if no valid token at all
+        if (tok.current()==null){
+            return null;
+        }
+        if (tok.current().getType() == Token.Type.TAG){
+            String current = tok.current().getToken();
+            return new TagExp(current);
+        } else {
+            return null;
+        }
+    }
+
+    public Exp getPostId(){
+        Tokenizer tok = tokenizer;
+        //handle if no valid token at all
+        if (tok.current()==null){
+            return null;
+        }
+        if (tok.current().getType() == Token.Type.POSTID){
+            String current = tok.current().getToken();
+            return new PostIdExp(current);
+        } else {
+            tok.next();
+            tok.next();
+            if (tok.current() == null){
+                return null;
+                // input(nothing) handle
+            }
+            String current = tok.current().getToken();
+            return new PostIdExp(current);
+
+        }
+    }
+
+
+
+
 
     /**
      * Adheres to the grammar rule:
@@ -95,32 +152,30 @@ public class Parser {
          */
         // ########## YOUR CODE STARTS HERE ##########
         Tokenizer tok = tokenizer;
-        if (illegal){
-            throw new IllegalProductionException("aaa");
+//        Exp exp =
 
-        }
-        Exp term = parseTerm();
-
-
-        if(tok.hasNext()&&tok.current().getType()== Token.Type.ADD){
-            tok.next();
-            Exp exp = parseExp();
-            return new AddExp(term,exp);
-        }
-        if(tok.hasNext() && tok.current().getType()== Token.Type.SUB){
-            tok.next();
-            Exp exp = parseExp();
-            return new SubExp(term,exp);
-        } else {
-            if (illegal){
-                throw new IllegalProductionException("aaa");
-
-            }
-            return term;
-        }
+//        Exp term = parseTerm();
+//
+//
+//        if(tok.hasNext()&&tok.current().getType()== Token.Type.ADD){
+//            tok.next();
+//            Exp exp = parseExp();
+//            return new AndExp(term,exp);
+//        }
+//        if(tok.hasNext() && tok.current().getType()== Token.Type.SUB){
+//            tok.next();
+//            Exp exp = parseExp();
+//            return new AndExp(term,exp);
+//        } else {
+//            if (illegal){
+//                throw new IllegalProductionException("aaa");
+//
+//            }
+//            return term;
+//        }
 
 
-//        return null; // Change this return (if you want). It is simply a placeholder to prevent an error.
+        return null; // Change this return (if you want). It is simply a placeholder to prevent an error.
         // ########## YOUR CODE ENDS HERE ##########
     }
 
@@ -138,26 +193,19 @@ public class Parser {
          */
         // ########## YOUR CODE STARTS HERE ##########
         Tokenizer tok = tokenizer;
-//        try {
-//            Exp factor = parseFactor();
-//
-//        } catch ()
-        if (illegal){
-            throw new IllegalProductionException("aaa");
 
-        }
         Exp factor = parseFactor();
 
 
         if(tok.hasNext() && tok.current().getType()== Token.Type.MUL){
             tok.next();
             Exp term = parseTerm();
-            return new MultExp(factor,term);
+            return new AndExp(factor,term);
         }
         if(tok.hasNext() && tok.current().getType()== Token.Type.DIV){
             tok.next();
             Exp term = parseTerm();
-            return new DivExp(factor,term);
+            return new AndExp(factor,term);
         } else {
             if (illegal){
                 throw new IllegalProductionException("aaa");
@@ -193,7 +241,7 @@ public class Parser {
             return exp;
         } else {
             try {
-                Exp i = new IntExp(Integer.parseInt(tok.current().getToken()));
+                Exp i = new TagExp((tok.current().getToken()));
                 tok.next();
 
                 return i;
@@ -204,6 +252,40 @@ public class Parser {
                 throw new IllegalProductionException("yes");
             }
         }
+
+
+//        public Exp parseExp2() throws IllegalProductionException {
+//        /*
+//         TODO: Implement parse function for <exp>.
+//         TODO: Throw an IllegalProductionException if provided with tokens not conforming to the grammar.
+//         Hint 1: you know that the first item will always be a term (according to the grammar).
+//         Hint 2: the possible grammar return '<term> + <exp>' correlates with the class (AddExp(term, exp)).
+//         */
+//            // ########## YOUR CODE STARTS HERE ##########
+//            Tokenizer tok = tokenizer;
+//            if (illegal){
+//                throw new IllegalProductionException("aaa");
+//
+//            }
+//            Exp term = parseTerm();
+//
+//
+//            if(tok.hasNext()&&tok.current().getType()== Token.Type.ADD){
+//                tok.next();
+//                Exp exp = parseExp2();
+//                return new AddExp(term,exp);
+//            }
+//            if(tok.hasNext() && tok.current().getType()== Token.Type.SUB){
+//                tok.next();
+//                Exp exp = parseExp2();
+//                return new SubExp(term,exp);
+//            } else {
+//                if (illegal){
+//                    throw new IllegalProductionException("aaa");
+//
+//                }
+//                return term;
+//            }
 
 
 //        return null; // Change this return (if you want). It is simply a placeholder to prevent an error.

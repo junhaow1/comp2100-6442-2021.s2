@@ -1,4 +1,4 @@
-package Task1_Factory.Task2;
+package Task1_Factory.Task2.Search;
 
 import java.util.Scanner;
 
@@ -77,10 +77,10 @@ public class Tokenizer {
         The rest will follow a similar format.
          */
         char firstChar = buffer.charAt(0);
-        if (firstChar == '+')
-            currentToken = new Token("+", Token.Type.ADD);
-        if (firstChar == '-')
-            currentToken = new Token("-", Token.Type.SUB);
+//        if (firstChar == '+')
+//            currentToken = new Token("+", Token.Type.ADD);
+//        if (firstChar == '-')
+//            currentToken = new Token("-", Token.Type.SUB);
 
         /*
          TODO: Implement multiplication and division tokenizing.
@@ -90,21 +90,13 @@ public class Tokenizer {
          Hint: Character.isDigit() may be useful.
          */
         // ########## YOUR CODE STARTS HERE ##########
-        if (firstChar == '*')
-            currentToken = new Token("*", Token.Type.MUL);
-        if (firstChar == '/')
-            currentToken = new Token("/", Token.Type.DIV);
-        if (firstChar == '(')
-            currentToken = new Token("(", Token.Type.LBRA);
-        if (firstChar == ')')
-            currentToken = new Token(")", Token.Type.RBRA);
-        //handle int
-        if (Character.isDigit(firstChar)){
+        //tag
+        if (firstChar == '#'){
             StringBuilder stringBuilder =  new StringBuilder();
-            int pos = 0 ;
+            int pos = 1 ;
             //current char (digit) , pointer
             char current = buffer.charAt(pos);
-            while(Character.isDigit(current)){
+            while(current!=';'){
                 stringBuilder.append(current);
                 pos++;
                 // if else to handle the out of range bug
@@ -115,20 +107,63 @@ public class Tokenizer {
                     break;
                 }
             }
-            currentToken = new Token(stringBuilder.toString(), Token.Type.INT);
-        }
-        if (firstChar!='+' && firstChar!='-' &&firstChar!='*' &&firstChar!='/' &&firstChar!='(' &&firstChar!=')'&&!Character.isDigit(firstChar) ){
-            throw new Token.IllegalTokenException("Dumb Ass :)") ;
+            currentToken = new Token(stringBuilder.toString(), Token.Type.TAG);
+
         }
 
+        //post ID
+        if (firstChar == '@'){
+            StringBuilder stringBuilder =  new StringBuilder();
+            int pos = 1 ;
+            //current char (digit) , pointer
+            char current = buffer.charAt(pos);
+            while(current!=';'){
+                stringBuilder.append(current);
+                pos++;
+                // if else to handle the out of range bug
+                //make sure the current pointer is not out of bounds
+                if(pos<buffer.length()){
+                    current = buffer.charAt(pos);
+                } else {
+                    break;
+                }
+            }
+            currentToken = new Token(stringBuilder.toString(), Token.Type.POSTID);
+
+        }
+        if (firstChar == ';'){
+            currentToken = new Token(";", Token.Type.AND);
+        }
+//        if (firstChar == '*')
+//            currentToken = new Token("*", Token.Type.MUL);
+//        if (firstChar == '/')
+//            currentToken = new Token("/", Token.Type.DIV);
+//        if (firstChar == '(')
+//            currentToken = new Token("(", Token.Type.LBRA);
+//        if (firstChar == ')')
+//            currentToken = new Token(")", Token.Type.RBRA);
+//
 
 
         // ########## YOUR CODE ENDS HERE ##########
         // Remove the extracted token from buffer
-        int tokenLen = currentToken.getToken().length();
-        buffer = buffer.substring(tokenLen);
+        if (currentToken==null){
+//            throw new Token.IllegalTokenException("no valid query string");
+            System.out.println("no valid query string");
+        } else {
+            int tokenLen = currentToken.getToken().length();
+            if(currentToken.getType().equals(Token.Type.TAG)){
+                tokenLen++;
+            }
+            if(currentToken.getType().equals(Token.Type.POSTID)){
+                tokenLen++;
+            }
+            buffer = buffer.substring(tokenLen);
+        }
+
 
     }
+
 
     /**
      * Returns the current token extracted by {@code next()}
